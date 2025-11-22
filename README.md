@@ -41,6 +41,25 @@ $response = $api->createOrder($order);
 var_dump($response);
 ```
 
+Payment
+```
+use RevolutMerchantApi\Api\RevolutApi;
+use RevolutMerchantApi\Dto\Response\RevolutPaymentResponse;
+use RevolutMerchantApi\Dto\Response\RevolutException;
+
+/** @var RevolutApi $api */
+$api = $this->revolutMerchantApi; // v Nette přes DI
+
+$paymentId = '6633855a-0e4f-a768-8b2c-e765d8872505';
+$response = $api->getPayment($paymentId);
+
+if ($response instanceof RevolutPaymentResponse) {
+    dump($response->state, $response->amount, $response->paymentMethod);
+} elseif ($response instanceof RevolutException) {
+    dump($response->statusCode, $response->raw); // raw['errorId'], raw['code'] atd.
+}
+```
+
 Nette DI Extension
 ```
 extensions:
