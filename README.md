@@ -7,7 +7,7 @@ PHP client pro **Revolut Merchant API** s podporou **Nette DI** a **Tracy panelu
 Pomocí Composeru:
 
 ```bash
-composer require insightbase/RevolutMerchantApi-nette
+composer require insightbase/revolut-merchant-api-nette
 ```
 Požadavky
 
