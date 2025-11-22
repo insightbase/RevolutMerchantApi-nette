@@ -19,6 +19,7 @@ class RevolutOrderResponse implements RevolutResponseInterface
         public int $outstandingAmount,
         public CaptureMode $captureMode,
         public string $checkoutUrl,
+        public string $redirectUrl,
         public ChallengeMode $enforceChallenge,
         public array $raw
     ) { }
@@ -37,6 +38,7 @@ class RevolutOrderResponse implements RevolutResponseInterface
             $d['outstanding_amount'],
             CaptureMode::from($d['capture_mode']),
             $d['checkout_url'],
+            $d['redirect_url'],
             ChallengeMode::from($d['enforce_challenge']),
             $d
         );

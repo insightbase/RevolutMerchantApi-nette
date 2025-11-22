@@ -50,6 +50,15 @@ class RevolutOrder
         $this->data['metadata'] = $metadata;
         return $this;
     }
+    public function setRedirectUrl(string $redirectUrl): self
+    {
+        $this->data['redirect_url'] = $redirectUrl;
+        return $this;
+    }
+
+
+
+
 
     public function addField(string $key, mixed $value): self
     {
