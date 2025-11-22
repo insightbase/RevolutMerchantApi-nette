@@ -3,60 +3,104 @@ namespace RevolutMerchantApi\Api;
 
 use RevolutMerchantApi\Dto\RevolutOrder;
 use RevolutMerchantApi\Dto\RefundRequest;
-use RevolutMerchantApi\Dto\Response\{
-    RevolutOrderResponse,
+use RevolutMerchantApi\Exception\RevolutException;
+use RevolutMerchantApi\Dto\Response\{RevolutOrderResponse,
     RevolutErrorResponse,
+    RevolutPaymentResponse,
     RevolutRefundResponse,
     RevolutListResponse,
-    RevolutResponseInterface
-};
+    RevolutResponseInterface};
 
 class RevolutApi
 {
     public function __construct(
         private RevolutHttpClient $client
-    ) { }
-
-    public function createOrder(RevolutOrder $order): RevolutResponseInterface
+    )
     {
-        return $this->handle(
-            $this->client->request('POST', '/orders', $order->toArray())
-        );
     }
 
-    public function getOrder(string $id): RevolutResponseInterface
+    /**
+     * @throws RevolutException
+     */
+    public function createOrder(RevolutOrder $order): RevolutOrderResponse
     {
-        return $this->handle(
-            $this->client->request('GET', '/orders/' . $id)
-        );
+        $response = $this->client->request('POST', '/orders', $order->toArray());
+
+        if ($response['status'] >= 400) {
+            throw new RevolutException(
+                $response['data']['message'] ?? 'Revolut API error',
+                $response['data']['code'] ?? 0
+            );
+        }
+
+        return RevolutOrderResponse::fromArray($response['data']);
     }
 
-    public function listOrders(): RevolutResponseInterface
+    /**
+     * @throws RevolutException
+     */
+    public function getOrder(string $id): RevolutOrderResponse
     {
-        return $this->handle(
-            $this->client->request('GET', '/orders')
-        );
+        $response = $this->client->request('GET', '/orders/' . $id);
+
+        if ($response['status'] >= 400) {
+            throw new RevolutException(
+                $response['data']['message'] ?? 'Revolut API error',
+                $response['data']['code'] ?? 0
+            );
+        }
+
+        return RevolutOrderResponse::fromArray($response['data']);
     }
 
-    public function refund(string $orderId, RefundRequest $refund): RevolutResponseInterface
+    /**
+     * @throws RevolutException
+     */
+    public function getPayment(string $paymentId): RevolutPaymentResponse
     {
-        return $this->handle(
-            $this->client->request('POST', "/orders/$orderId/refund", $refund->toArray())
-        );
+        $response = $this->client->request('GET', '/payments/' . $paymentId);
+
+        if ($response['status'] >= 400) {
+            throw new RevolutException(
+                $response['data']['message'] ?? 'Revolut API error',
+                $response['data']['code'] ?? 0
+            );
+        }
+
+        return RevolutPaymentResponse::fromArray($response['data']);
     }
 
-    private function handle(array $response): RevolutResponseInterface
+    /**
+     * @throws RevolutException
+     */
+    public function listOrders(): RevolutListResponse
     {
-        $status = $response['status'];
-        $json   = $response['data'];
+        $response = $this->client->request('GET', '/orders');
 
-        return match ($status) {
-            200, 201 => isset($json['checkout_url'])
-                ? RevolutOrderResponse::fromArray($json)
-                : (isset($json['id']) && isset($json['state']) && isset($json['amount'])
-                    ? RevolutRefundResponse::fromArray($json)
-                    : (is_array($json) ? RevolutListResponse::fromArray($json) : RevolutOrderResponse::fromArray($json))),
-            default  => RevolutErrorResponse::fromArray($json ?? [], $status),
-        };
+        if ($response['status'] >= 400) {
+            throw new RevolutException(
+                $response['data']['message'] ?? 'Revolut API error',
+                $response['data']['code'] ?? 0
+            );
+        }
+
+        return RevolutListResponse::fromArray($response['data']);
     }
+
+    public function refund(string $orderId, RefundRequest $refund): RevolutRefundResponse
+    {
+        $response = $this->client->request('POST', "/orders/$orderId/refund", $refund->toArray());
+
+        if ($response['status'] >= 400) {
+            throw new RevolutException(
+                $response['data']['message'] ?? 'Revolut API error',
+                $response['data']['code'] ?? 0
+            );
+        }
+
+        return RevolutRefundResponse::fromArray($response['data']);
+    }
+
 }
+
+
