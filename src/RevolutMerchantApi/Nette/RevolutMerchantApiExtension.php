@@ -13,7 +13,7 @@ class RevolutMerchantApiExtension extends CompilerExtension
     private array $defaults = [
         'apiKey' => null,
         'apiUrl' => 'https://merchant.revolut.com/api',
-        'debug' => true,
+        'debug' => false,
     ];
 
     public function loadConfiguration()
@@ -41,7 +41,7 @@ class RevolutMerchantApiExtension extends CompilerExtension
         $config = $this->getConfig();
         if (!($config['debug'] ?? false)) { return; }
 
-        $initialize = $class->methods['initialize'];
-        $initialize->addBody('Tracy\Debugger::getBar()->addPanel(new \' . RevolutPanel::class . '($this->getService(?)));', [$this->prefix('logger')]);
+        //$initialize = $class->methods['initialize'];
+        //$initialize->addBody('Tracy\Debugger::getBar()->addPanel(new \' . RevolutPanel::class . '($this->getService(?));', [$this->prefix('logger')]);
     }
 }

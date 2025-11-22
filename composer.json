@@ -1,5 +1,5 @@
 {
-  "name": "insightbase/RevolutMerchantApi-nette",
+  "name": "insightbase/revolut-merchant-api-nette",
   "description": "Revolut Merchant API client for PHP / Nette",
   "type": "library",
   "license": "MIT",
