@@ -1,15 +1,13 @@
 <?php
 namespace RevolutMerchantApi\Api;
 
-use RevolutMerchantApi\Dto\RevolutOrder;
 use RevolutMerchantApi\Dto\RefundRequest;
-use RevolutMerchantApi\Exception\RevolutException;
-use RevolutMerchantApi\Dto\Response\{RevolutOrderResponse,
-    RevolutErrorResponse,
+use RevolutMerchantApi\Dto\Response\{RevolutListResponse,
+    RevolutOrderResponse,
     RevolutPaymentResponse,
-    RevolutRefundResponse,
-    RevolutListResponse,
-    RevolutResponseInterface};
+    RevolutRefundResponse};
+use RevolutMerchantApi\Dto\RevolutOrder;
+use RevolutMerchantApi\Exception\RevolutException;
 
 class RevolutApi
 {
@@ -29,7 +27,8 @@ class RevolutApi
         if ($response['status'] >= 400) {
             throw new RevolutException(
                 $response['data']['message'] ?? 'Revolut API error',
-                $response['data']['code'] ?? 0
+                $response['data']['code'] ?? null,
+                $response['status']
             );
         }
 
@@ -46,7 +45,8 @@ class RevolutApi
         if ($response['status'] >= 400) {
             throw new RevolutException(
                 $response['data']['message'] ?? 'Revolut API error',
-                $response['data']['code'] ?? 0
+                $response['data']['code'] ?? null,
+                $response['status']
             );
         }
 
@@ -63,7 +63,8 @@ class RevolutApi
         if ($response['status'] >= 400) {
             throw new RevolutException(
                 $response['data']['message'] ?? 'Revolut API error',
-                $response['data']['code'] ?? 0
+                $response['data']['code'] ?? null,
+                $response['status']
             );
         }
 
@@ -80,7 +81,8 @@ class RevolutApi
         if ($response['status'] >= 400) {
             throw new RevolutException(
                 $response['data']['message'] ?? 'Revolut API error',
-                $response['data']['code'] ?? 0
+                $response['data']['code'] ?? null,
+                $response['status']
             );
         }
 
@@ -94,7 +96,8 @@ class RevolutApi
         if ($response['status'] >= 400) {
             throw new RevolutException(
                 $response['data']['message'] ?? 'Revolut API error',
-                $response['data']['code'] ?? 0
+                $response['data']['code'] ?? null,
+                $response['status']
             );
         }
 
