@@ -2,6 +2,8 @@
 
 namespace RevolutMerchantApi\Dto\Response;
 
+use RevolutMerchantApi\Enum\OrderPaymentState;
+
 class RevolutOrderPaymentsResponse implements RevolutResponseInterface
 {
     /**
@@ -19,6 +21,10 @@ class RevolutOrderPaymentsResponse implements RevolutResponseInterface
 
     public static function fromArray(array $data): self
     {
+        foreach ($data as &$item) {
+            $item['state_enum'] = OrderPaymentState::try($item['state']);
+        }
+
         return new self(
             $data,
             $data
