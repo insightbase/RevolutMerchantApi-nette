@@ -1,0 +1,19 @@
+{
+  "name": "insightbase/RevolutMerchantApi-nette",
+  "description": "Revolut Merchant API client for PHP / Nette",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "RevolutMerchantApi\\": "src/RevolutMerchantApi/"
+    }
+  },
+  "require": {
+    "php": ">=8.1",
+    "ext-curl": "*",
+    "nette/di": "^3.1",
+    "tracy/tracy": "^2.10"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
