@@ -3,6 +3,7 @@ namespace RevolutMerchantApi\Api;
 
 use RevolutMerchantApi\Dto\RefundRequest;
 use RevolutMerchantApi\Dto\Response\{RevolutListResponse,
+    RevolutOrderPaymentsResponse,
     RevolutOrderResponse,
     RevolutPaymentResponse,
     RevolutRefundResponse};
@@ -51,6 +52,27 @@ class RevolutApi
         }
 
         return RevolutOrderResponse::fromArray($response['data']);
+    }
+
+    /**
+     * @throws RevolutException
+     */
+    public function getOrderPayments(string $orderId): RevolutOrderPaymentsResponse
+    {
+        $response = $this->client->request(
+            'GET',
+            "/orders/$orderId/payments"
+        );
+
+        if ($response['status'] >= 400) {
+            throw new RevolutException(
+                $response['data']['message'] ?? 'Revolut API error',
+                $response['data']['code'] ?? null,
+                $response['status']
+            );
+        }
+
+        return RevolutOrderPaymentsResponse::fromArray($response['data']);
     }
 
     /**

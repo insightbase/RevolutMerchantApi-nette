@@ -41,7 +41,22 @@ $response = $api->createOrder($order);
 var_dump($response);
 ```
 
-Payment
+Order payments:
+```
+try {
+    $payments = $revolut->getOrderPayments($orderId);
+
+    foreach ($payments->items as $payment) {
+        dump($payment['id'], $payment['state'], $payment['payment_method']);
+    }
+
+} catch (RevolutException $e) {
+    dump($e->errorCode, $e->httpStatus, $e->getMessage());
+}
+```
+
+
+Payment detail
 ```
 use RevolutMerchantApi\Api\RevolutApi;
 use RevolutMerchantApi\Dto\Response\RevolutPaymentResponse;
